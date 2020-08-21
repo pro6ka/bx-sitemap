@@ -8,8 +8,8 @@ $menu = array(
     array(
         'parent_menu' => 'global_menu_content',
         'sort' => 400,
-        'text' => Loc::getMessage('BEX_sitemap_MENU_TITLE'),
-        'title' => Loc::getMessage('BEX_sitemap_MENU_TITLE'),
+        'text' => Loc::getMessage('PRO6KA_sitemap_MENU_TITLE'),
+        'title' => Loc::getMessage('PRO6KA_sitemap_MENU_TITLE'),
         'url' => 'sitemap_index.php',
         'items_id' => 'menu_references',
         'items' => array(

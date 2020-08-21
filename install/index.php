@@ -4,7 +4,7 @@ use Bitrix\Main\Application;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
-use Bex\sitemap\ExampleTable;
+use Pro6ka\Sitemap\ExampleTable;
 
 Loc::loadMessages(__FILE__);
 

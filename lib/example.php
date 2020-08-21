@@ -1,6 +1,6 @@
 <?php
 
-namespace Bex\sitemap;
+namespace Pro6ka\Sitemap;
 
 use Bitrix\Main\Entity\DataManager;
 use Bitrix\Main\Entity\IntegerField;
@@ -23,13 +23,13 @@ class ExampleTable extends DataManager
             new IntegerField('ID', array(
                 'autocomplete' => true,
                 'primary' => true,
-                'title' => Loc::getMessage('BEX_sitemap_ID'),
+                'title' => Loc::getMessage('PRO6KA_sitemap_ID'),
             )),
             new StringField('NAME', array(
                 'required' => true,
-                'title' => Loc::getMessage('BEX_sitemap_NAME'),
+                'title' => Loc::getMessage('PRO6KA_sitemap_NAME'),
                 'default_value' => function () {
-                    return Loc::getMessage('BEX_sitemap_NAME_DEFAULT_VALUE');
+                    return Loc::getMessage('PRO6KA_sitemap_NAME_DEFAULT_VALUE');
                 },
                 'validation' => function () {
                     return array(
@@ -39,7 +39,7 @@ class ExampleTable extends DataManager
             )),
             new StringField('IMAGE_SET', array(
                 'required' => false,
-                'title' => Loc::getMessage('BEX_sitemap_IMAGE_SET'),
+                'title' => Loc::getMessage('PRO6KA_sitemap_IMAGE_SET'),
                 'fetch_data_modification' => function () {
                     return array(
                         function ($value) {
