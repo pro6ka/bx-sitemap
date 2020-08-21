@@ -14,10 +14,10 @@ $menu = array(
         'items_id' => 'menu_references',
         'items' => array(
             array(
-                'text' => Loc::getMessage('BEX_sitemap_SUBMENU_TITLE'),
+                'text' => Loc::getMessage('PRO6KA_sitemap_SUBMENU_TITLE'),
                 'url' => 'sitemap_index.php?param1=paramval&lang=' . LANGUAGE_ID,
                 'more_url' => array('sitemap_index.php?param1=paramval&lang=' . LANGUAGE_ID),
-                'title' => Loc::getMessage('BEX_sitemap_SUBMENU_TITLE'),
+                'title' => Loc::getMessage('PRO6KA_sitemap_SUBMENU_TITLE'),
             ),
         ),
     ),

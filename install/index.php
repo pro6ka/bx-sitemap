@@ -8,7 +8,7 @@ use Bex\sitemap\ExampleTable;
 
 Loc::loadMessages(__FILE__);
 
-class bex_sitemap extends CModule
+class pro6ka_sitemap extends CModule
 {
     public function __construct()
     {
@@ -16,37 +16,72 @@ class bex_sitemap extends CModule
         
         include __DIR__ . '/version.php';
 
-        if (is_array($arModuleVersion) && array_key_exists('VERSION', $arModuleVersion))
-        {
+        if (is_array($arModuleVersion) && array_key_exists('VERSION', $arModuleVersion)) {
             $this->MODULE_VERSION = $arModuleVersion['VERSION'];
             $this->MODULE_VERSION_DATE = $arModuleVersion['VERSION_DATE'];
         }
         
-        $this->MODULE_ID = 'bex.sitemap';
-        $this->MODULE_NAME = Loc::getMessage('BEX_sitemap_MODULE_NAME');
-        $this->MODULE_DESCRIPTION = Loc::getMessage('BEX_sitemap_MODULE_DESCRIPTION');
+        $this->MODULE_ID = 'pro6ka.sitemap';
+        $this->MODULE_NAME = Loc::getMessage('PRO6KA_sitemap_MODULE_NAME');
+        $this->MODULE_DESCRIPTION = Loc::getMessage('PRO6KA_sitemap_MODULE_DESCRIPTION');
         $this->MODULE_GROUP_RIGHTS = 'N';
-        $this->PARTNER_NAME = Loc::getMessage('BEX_sitemap_MODULE_PARTNER_NAME');
-        $this->PARTNER_URI = 'http://bitrix.expert';
+        $this->PARTNER_NAME = Loc::getMessage('PRO6KA_sitemap_MODULE_PARTNER_NAME');
+        $this->PARTNER_URI = 'https://github.com/pro6ka';
     }
 
     public function doInstall()
     {
-        ModuleManager::registerModule($this->MODULE_ID);
-        $this->installDB();
+        if ($this->InstallFiles()) {
+            ModuleManager::registerModule($this->MODULE_ID);
+        } else {
+            throw new \Bitrix\Main\SystemException('not installed');
+        }
+//        $this->installDB();
     }
-
+    
+    public function InstallFiles()
+    {
+        $modulePath = $this->getModulePath();
+        if ($this->isLocal($modulePath)) {
+            $copyTo = Application::getDocumentRoot() . '/local/components/';
+        } else {
+            $copyTo = Application::getDocumentRoot() . "/bitrix/components";
+        }
+        $copyResult = CopyDirFiles(
+            $this->getModulePath() . "install/components/",
+            $copyTo,
+            true,
+            true
+        );
+        return $copyResult;
+    }
+    
     public function doUninstall()
     {
-        $this->uninstallDB();
+        //$this->uninstallDB();
         ModuleManager::unRegisterModule($this->MODULE_ID);
+        $unInstallFiles = $this->UnInstallFiles();
+        return true;
     }
-
+    
+    public function UnInstallFiles()
+    {
+        $modulePath = $this->getModulePath();
+        if ($this->isLocal($modulePath)) {
+            $toRemove = Application::getDocumentRoot() . '/local/components/' . strtolower($this->PARTNER_NAME) . '/';
+        } else {
+            $toRemove = Application::getDocumentRoot() . "/bitrix/components/" . strtolower($this->PARTNER_NAME) . '/';
+        }
+        return \Bitrix\Main\IO\Directory::deleteDirectory($toRemove);
+    }
+    
     public function installDB()
     {
-        if (Loader::includeModule($this->MODULE_ID))
-        {
-            ExampleTable::getEntity()->createDbTable();
+        try {
+            if (Loader::includeModule($this->MODULE_ID)) {
+                ExampleTable::getEntity()->createDbTable();
+            }
+        } catch (\Bitrix\Main\LoaderException $e) {
         }
     }
 
@@ -57,5 +92,17 @@ class bex_sitemap extends CModule
             $connection = Application::getInstance()->getConnection();
             $connection->dropTable(ExampleTable::getTableName());
         }
+    }
+    
+    private function isLocal($modulePath = '') {
+        if (! $modulePath) {
+            $modulePath = $this->getModulePath();
+        }
+        return preg_match('~\/local\/~', $modulePath);
+    }
+    
+    private function getModulePath()
+    {
+        return preg_replace('~install$~', '', __DIR__);
     }
 }

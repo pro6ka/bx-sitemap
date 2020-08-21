@@ -1,22 +1,20 @@
 {
-  "name": "bitrix-expert/bex.sitemap",
-  "description": "Заготовка модуля на d7, на основе которой можно разрабатывать свои решения",
-  "keywords": ["bitrix", "Битрикс", "d7", "модуль"],
+  "name": "mprokhorov/bex.sitemap",
+  "description": "Bitrix Sitemap",
+  "keywords": ["bitrix", "Битрикс", "d7", "модуль", "sitemap"],
   "type": "bitrix-module",
   "license": "MIT",
   "support": {
-    "www": "http://bitrix.expert",
-    "skype": "may_cat_ghost",
-    "source": "http://github.com/bitrix-expert/bex.sitemap/"
+    "source": "https://github.com/pro6ka/bx-sitemap"
   },
   "authors": [
     {
-      "name": "Цупко Игорь (may_cat)",
-      "email": "maicatus@gmail.com"
+      "name": "Mikhaili Prokhorov",
+      "email": "proch-m@yandex.ru"
     }
   ],
   "extra": {
-    "installer-name": "bex.sitemap"
+    "installer-name": "pro6ka.sitemap"
   },
   "require": {
     "composer/installers": ">=1.0.22 <2.0"

@@ -1,5 +1,5 @@
 <?php
 
-$MESS['BEX_sitemap_MODULE_NAME'] = 'D7-образец';
-$MESS['BEX_sitemap_MODULE_DESCRIPTION'] = 'Модуль-болванка, написанный на новом ядре Битрикса.';
-$MESS['BEX_sitemap_MODULE_PARTNER_NAME'] = 'Битрикс-эксперты';
+$MESS['PRO6KA_sitemap_MODULE_NAME'] = 'Sitemap';
+$MESS['PRO6KA_sitemap_MODULE_DESCRIPTION'] = 'Sitemap generation';
+$MESS['PRO6KA_sitemap_MODULE_PARTNER_NAME'] = 'pro6ka';
