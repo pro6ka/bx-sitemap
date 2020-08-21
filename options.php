@@ -5,7 +5,7 @@ use Bitrix\Main\Config\Option;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Text\HtmlFilter;
 
-defined('ADMIN_MODULE_NAME') or define('ADMIN_MODULE_NAME', 'bex.d7dull');
+defined('ADMIN_MODULE_NAME') or define('ADMIN_MODULE_NAME', 'bex.sitemap');
 
 if (!$USER->isAdmin()) {
     $APPLICATION->authForm('Nope');
