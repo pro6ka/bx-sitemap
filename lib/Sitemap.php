@@ -48,22 +48,33 @@
                     $this->putElement($item, $result);
                 }
             }
+            d($result);
             return $result;
         }
         
-        private function putSection(\Pro6ka\Sitemap\SitemapItem $section, &$result)
+        private function putSection(SitemapItem $section, &$result) : void
         {
-            foreach ($result as $resultItem) {
-                d($resultItem);
+            /** @var SitemapItem $resultItem */
+            foreach ($result as $key => $resultItem) {
+                if (preg_match('~^' . $resultItem->URL . '~', $section->URL)) {
+                    $itemElement = $result[$key];
+                    if (! $section->IBLOCK_SECTION_ID) {
+                        $itemElement->pushChild($section);
+                        break;
+                    } else {
+                    
+                    }
+                    break;
+                }
             }
         }
     
-        private function putElement(\Pro6ka\Sitemap\SitemapItem $element, &$result)
+        private function putElement(SitemapItem $element, &$result) : void
         {
         
         }
     
-        private function getLastMod(\Pro6ka\Sitemap\SitemapItem $element)
+        private function getLastMod(SitemapItem $element)
         {
             /** TODO: make lastmod from shestpa.lastmodified module */
             return date('Y-m-d', time());

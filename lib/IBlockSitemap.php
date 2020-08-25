@@ -50,7 +50,7 @@
                 while ($section = $obSections->GetNext()) {
                     $section['FROM_IBLOCK'] = true;
                     $section['IS_SECTION'] = true;
-                    $element['URL'] = $section['SECTION_PAGE_URL'];
+                    $section['URL'] = $section['SECTION_PAGE_URL'];
                     $this->itemsCount += 1;
                     $this->items[] = new SitemapItem($section);
                     $this->setElements($section['IBLOCK_ID'], $section['ID']);
