@@ -42,10 +42,22 @@
                 $result[] = new SitemapItem($staticItem);
             }
             foreach ($this->iBlock->getItems() as $item) {
-                if ($item->IS_SECTION) {
-                    $this->putSection($item, $result);
-                } elseif ($item->IS_ELEMENT) {
-                    $this->putElement($item, $result);
+                if ($this->arParams['HTML_NEED_ELEMENTS'] == 'Y') {
+                    if ($item->IS_SECTION) {
+                        $this->putSection($item, $result);
+                    } elseif ($item->IS_ELEMENT) {
+                        if ($this->arParams['HTML_INCLUDE_ELEMENTS_IBLOCK']) {
+                            if (in_array($item->IBLOCK_ID, $this->arParams['HTML_INCLUDE_ELEMENTS_IBLOCK'])) {
+                                $this->putElement($item, $result);
+                            }
+                        } else {
+                            $this->putElement($item, $result);
+                        }
+                    }
+                } else {
+                    if ($item->IS_SECTION) {
+                        $this->putSection($item, $result);
+                    }
                 }
             }
             d($result);
@@ -99,7 +111,8 @@
     
         private function putElement(SitemapItem $element, &$result) : void
         {
-        
+            d($element);
+            die;
         }
     
         private function getLastMod(SitemapItem $element)
