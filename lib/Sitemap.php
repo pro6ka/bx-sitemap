@@ -62,9 +62,37 @@
                         $itemElement->pushChild($section);
                         break;
                     } else {
-                    
+                        $this->section2Section($section, $result);
                     }
                     break;
+                }
+            }
+        }
+    
+        private function section2Section(SitemapItem $section, &$result, $sectionChildren = []) : void
+        {
+            if (! $sectionChildren) {
+                foreach ($result as $key => $resultItem) {
+                    $itemElement = $result[$key];
+                    if ($itemElement->children) {
+                        foreach ($itemElement->children as $childKey => $child) {
+                            if ($child->ID == $section->IBLOCK_SECTION_ID) {
+                                $child->pushChild($section);
+                                break 2;
+                            } elseif ($child->children) {
+                                $this->section2Section($section, $result, $child->children);
+                            }
+                        }
+                    }
+                }
+            } else {
+                foreach ($sectionChildren as $childKey => $child) {
+                    if ($child->ID == $section->IBLOCK_SECTION_ID) {
+                        $child->pushChild($section);
+                        break;
+                    } elseif ($child->children) {
+                        $this->section2Section($section, $result, $child->children);
+                    }
                 }
             }
         }
