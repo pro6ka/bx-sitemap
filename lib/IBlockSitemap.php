@@ -47,24 +47,28 @@
                     ],
                     ['ID', 'IBLOCK_ID', 'NAME', 'SECTION_PAGE_URL', 'DEPTH_LEVEL', 'IBLOCK_SECTION_ID']
                 );
-                while ($section = $obSections->GetNext()) {
-                    $section['FROM_IBLOCK'] = true;
-                    $section['IS_SECTION'] = true;
-                    $section['URL'] = $section['SECTION_PAGE_URL'];
-                    $this->itemsCount += 1;
-                    $this->items[] = new SitemapItem($section);
-                    $this->setElements($section['IBLOCK_ID'], $section['ID']);
+                if ($obSections->SelectedRowsCount()) {
+                    while ($section = $obSections->GetNext()) {
+                        $section['FROM_IBLOCK'] = true;
+                        $section['IS_SECTION'] = true;
+                        $section['URL'] = $section['SECTION_PAGE_URL'];
+                        $this->itemsCount += 1;
+                        $this->items[] = new SitemapItem($section);
+                        $this->setElements($section['IBLOCK_ID'], $section['ID']);
+                    }
+                } else {
+                    $this->setElements($iBlockId);
                 }
             }
         }
         
-        private function setElements($iBlocKId, $sectionId)
+        private function setElements($iBlocKId, $sectionId = false)
         {
             $obElements = \CIBlockElement::GetList(
                 ['SORT' => 'ASC'],
                 [
                     'IBLOCK_ID' => $iBlocKId,
-                    'SECTION_ID' => $sectionId,
+                    'SECTION_ID' => $sectionId ? : null,
                     'ACTIVE' => 'Y',
                     'GLOBAL_ACTIVE' => 'Y',
                     'CHECK_PERMISSIONS' => 'Y',
