@@ -8,7 +8,12 @@
     use Bitrix\Main\LoaderException;
 
     defined('B_PROLOG_INCLUDED') and (B_PROLOG_INCLUDED === true) or die();
-    
+
+    /**
+     * Class Sitemap
+     *
+     * @package Pro6ka\Sitemap
+     */
     class Sitemap
     {
         private $menu = null;
@@ -29,6 +34,46 @@
             $this->arParams = $arParams;
             $this->menu = new MenuSitemap($arParams['MENU_TYPE']);
             $this->iBlock = new IBlockSitemap($arParams['IBLOCK_ID']);
+            
+        }
+        
+        public function getXml() : array
+        {
+            $result = [];
+            foreach ($this->menu->getItems() as $menuItem) {
+                $menuItem->URL = $this->getFullUrl($menuItem);
+                $menuItem->DEPTH_LEVEL = 0;
+                $menuItem->LAST_MODIFIED = $this->getLastMod($menuItem);
+                $menuItem->CHANGEFREQ = $this->getChangeFreq($menuItem);
+                $menuItem->PRIORITY = $this->getPriority($menuItem);
+                $result[] = $menuItem;
+            }
+            foreach ($this->arParams['STATIC'] as $staticItem) {
+                $menuItem = new SitemapItem($staticItem);
+                $menuItem->URL = $this->getFullUrl($menuItem);
+                $menuItem->DEPTH_LEVEL = 0;
+                $menuItem->LAST_MODIFIED = $this->getLastMod($menuItem);
+                $menuItem->CHANGEFREQ = $this->getChangeFreq($menuItem);
+                $menuItem->PRIORITY = $this->getPriority($menuItem);
+                $result[] = $menuItem;
+            }
+            foreach ($this->iBlock->getItems() as $item) {
+                $item->URL = $this->getFullUrl($item);
+                $item->LAST_MODIFIED = $this->getLastMod($item);
+                $item->URL = $menuItem->URL . Context::getCurrent()->getRequest()->getHttpHost();
+                $item->CHANGEFREQ = $this->getChangeFreq($item);
+                $item->PRIORITY = $this->getPriority($item);
+                $result[] = $item;
+            }
+            return $result;
+        }
+        
+        private function getFullUrl($element)
+        {
+            $request = Context::getCurrent()->getRequest();
+            $protocol = $request->isHttps() ? 'https://' : 'http://';
+            $host = $request->getHttpHost();
+            return $protocol . $host . $element->URL;
         }
     
         /**
@@ -123,6 +168,11 @@
             }
         }
     
+        /**
+         * @param SitemapItem $element
+         * @param $result
+         * @param SitemapItem|null $sectionChildren
+         */
         private function putElement(SitemapItem $element, &$result, SitemapItem $sectionChildren = null) : void
         {
             if (! $sectionChildren) {
@@ -171,6 +221,26 @@
         }
     
         /**
+         * @param SitemapItem $element
+         * @return string
+         */
+        private function getPriority(SitemapItem $element) : float
+        {
+            /** TODO: create priority calculation */
+            return 0.5;
+        }
+    
+        /**
+         * @param SitemapItem $element
+         * @return string
+         */
+        private function getChangeFreq(SitemapItem $element) : string
+        {
+            /** TODO: create changefreq calculation */
+            return 'daily';
+        }
+    
+        /**
          * @param array $arParams
          * @return Sitemap
          * @throws LoaderException
@@ -186,6 +256,7 @@
         /**
          * @param $arParams
          * @return int
+         * @throws LoaderException
          */
         public static function countItems($arParams) : int
         {
