@@ -38,10 +38,13 @@
         {
             $result = [];
             foreach ($this->menu->getItems() as $menuItem) {
+                $menuItem->DEPTH_LEVEL = 0;
                 $result[] = $menuItem;
             }
             foreach ($this->arParams['STATIC'] as $staticItem) {
-                $result[] = new SitemapItem($staticItem);
+                $menuItem = new SitemapItem($staticItem);
+                $menuItem->DEPTH_LEVEL = 0;
+                $result[] = $menuItem;
             }
             foreach ($this->iBlock->getItems() as $item) {
                 if ($this->arParams['HTML_NEED_ELEMENTS'] == 'Y') {
@@ -76,6 +79,7 @@
                 if (preg_match('~^' . $resultItem->URL . '~', $section->URL)) {
                     $itemElement = $result[$key];
                     if (! $section->IBLOCK_SECTION_ID) {
+                        $section->DEPTH_LEVEL = $itemElement->DEPTH_LEVEL + 1;
                         $itemElement->pushChild($section);
                         break;
                     } else {
@@ -126,6 +130,7 @@
                     /** @var  SitemapItem $resultItem */
                     foreach ($result as $key => $resultItem) {
                         if ($resultItem->ID == $element->IBLOCK_SECTION_ID) {
+                            $element->DEPTH_LEVEL = $resultItem->DEPTH_LEVEL + 1;
                             $resultItem->pushChild($element);
                         } elseif ($resultItem->children) {
                             $this->putElement($element, $result, $resultItem);
@@ -135,6 +140,7 @@
                     /** @var  SitemapItem $resultItem */
                     foreach ($result as $key => $resultItem) {
                         if (preg_match('~^' . $resultItem->URL . '~', $element->URL)) {
+                            $element->DEPTH_LEVEL = $resultItem->DEPTH_LEVEL + 1;
                             $resultItem->pushChild($element);
                             break;
                         }
@@ -144,6 +150,7 @@
                 /** @var  SitemapItem $child */
                 foreach ($sectionChildren->getChildren() as $childKey => $child) {
                     if ($child->ID == $element->IBLOCK_SECTION_ID) {
+                        $element->DEPTH_LEVEL = $child->DEPTH_LEVEL + 1;
                         $child->pushChild($element);
                         break;
                     } elseif ($child->getChildren()) {
